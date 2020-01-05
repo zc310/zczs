@@ -1,4 +1,4 @@
-package zczs
+package pkg
 
 import (
 	"fmt"

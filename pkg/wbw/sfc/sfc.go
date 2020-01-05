@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"strings"
 
 	"github.com/pquerna/ffjson/ffjson"
 	"github.com/valyala/fasthttp"
 	"github.com/zc310/utils"
-	"github.com/zc310/zczs"
+	"github.com/zc310/zczs/pkg"
 )
 
 type Match struct {
@@ -101,7 +102,7 @@ func (p Match) Odds() string {
 }
 func GetZcMatchObject(issue string) (*Match, error) {
 	var m Match
-	b, err := zczs.GetByte(fmt.Sprintf("https://evs.500.com/esinfo/lotinfo/lot_info_modify?lotid=1&expect=%s&webviewsource=touch&platform=touch", issue))
+	b, err := pkg.GetByte(fmt.Sprintf("https://evs.500.com/esinfo/lotinfo/lot_info_modify?lotid=1&expect=%s&webviewsource=touch&platform=touch", issue))
 	if err != nil {
 		return &m, err
 	}
@@ -126,9 +127,9 @@ func HandlerOdds(ctx *fasthttp.RequestCtx) {
 	if err != nil {
 		return
 	}
-	q := zczs.OuPei{}
+	q := pkg.OuPei{}
 	for _, m := range obj.Data.Match {
-		var oi zczs.OuPeiItem
+		var oi pkg.OuPeiItem
 		oi.LastOdds3 = utils.StrToFloat(m.Cdata.Win)
 		oi.LastOdds1 = utils.StrToFloat(m.Cdata.Draw)
 		oi.LastOdds0 = utils.StrToFloat(m.Cdata.Lost)

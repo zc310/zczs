@@ -10,7 +10,7 @@ import (
 	"github.com/zc310/fasthttprouter"
 	"github.com/zc310/fs/middleware"
 	fslog "github.com/zc310/log"
-	"github.com/zc310/zczs/api"
+	"github.com/zc310/zczs/pkg/api"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 

@@ -7,7 +7,8 @@ import (
 	"github.com/pquerna/ffjson/ffjson"
 	"github.com/valyala/fasthttp"
 	"github.com/zc310/utils"
-	"github.com/zc310/zczs"
+
+	"github.com/zc310/zczs/pkg"
 	"log"
 	"net/http"
 	"regexp"
@@ -15,7 +16,7 @@ import (
 	"strings"
 )
 
-func Sfc(issue string, r9 bool) (*zczs.QkjInfo, error) {
+func Sfc(issue string, r9 bool) (*pkg.QkjInfo, error) {
 	res, err := http.Get(fmt.Sprintf("https://kaijiang.500.com/shtml/sfc/%s.shtml", issue[2:]))
 	if err != nil {
 		return nil, err
@@ -29,7 +30,7 @@ func Sfc(issue string, r9 bool) (*zczs.QkjInfo, error) {
 	}
 	var s1 []string
 	var s0 string
-	var info zczs.QkjInfo
+	var info pkg.QkjInfo
 	tb := doc.Find(".kjxq_box02 .kj_tablelist02")
 	if tb.Length() != 2 {
 		return nil, fmt.Errorf("无效开奖期次:%s", issue)
@@ -144,7 +145,7 @@ func HandlerIssue(ctx *fasthttp.RequestCtx) {
 
 	// {"c":"2019038","l":["2019041","2019040","2019039","2019038","2019037","2019036","2019035","2019034","2019033","2019032","2019031","2019030","2019029","2019028","2019027","2019026","2019025","2019024","2019023","2019022","2019021","2019020","2019019","2019018","2019017","2019016","2019015","2019014","2019013","2019012","2019011","2019010","2019009","2019008","2019007","2019006","2019005","2019004","2019003","2019002","2019001","2018176","2018175","2018174","2018173","2018172","2018171","2018170","2018169","2018168","2018167","2018166","2018165","2018164","2018163","2018162","2018161","2018160","2018159","2018158","2018157","2018156","2018155","2018154","2018153","2018152","2018151","2018150","2018149","2018148","2018147","2018146","2018145","2018144","2018143","2018142","2018141","2018140","2018139","2018138","2018137","2018136","2018135","2018134","2018133","2018132","2018131","2018130","2018129","2018128","2018127","2018126","2018125","2018124","2018123","2018122","2018121","2018120","2018119","2018118","2018117","2018116","2018115"]}
 
-	var q zczs.Issue
+	var q pkg.Issue
 	obj, err := GetZcMatchObject("")
 	if err != nil {
 		return
@@ -168,7 +169,7 @@ func HandlerIssue(ctx *fasthttp.RequestCtx) {
 }
 
 func HandlerMatch(ctx *fasthttp.RequestCtx) {
-	var q zczs.ZcMatch
+	var q pkg.ZcMatch
 	q.Issue = string(ctx.QueryArgs().Peek("issue"))
 
 	obj, err := GetZcMatchObject(q.Issue[2:])
@@ -177,9 +178,9 @@ func HandlerMatch(ctx *fasthttp.RequestCtx) {
 		return
 	}
 	for _, m := range obj.Data.Match {
-		var mc zczs.Match
-		mc.HomeTeam = zczs.AddSpace(m.Mdata.Homesxname)
-		mc.AwayTeam = zczs.AddSpace(m.Mdata.Awaysxname)
+		var mc pkg.Match
+		mc.HomeTeam = pkg.AddSpace(m.Mdata.Homesxname)
+		mc.AwayTeam = pkg.AddSpace(m.Mdata.Awaysxname)
 		mc.Issue = q.Issue
 		mc.LeagueName = m.Mdata.Simpleleague
 		mc.LeagueColor = m.Mdata.Bgcolor

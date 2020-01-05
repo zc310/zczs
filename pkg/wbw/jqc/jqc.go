@@ -7,8 +7,9 @@ import (
 	"github.com/pquerna/ffjson/ffjson"
 	"github.com/valyala/fasthttp"
 	"github.com/zc310/utils"
-	"github.com/zc310/zczs"
-	"github.com/zc310/zczs/wbw"
+
+	"github.com/zc310/zczs/pkg"
+	"github.com/zc310/zczs/pkg/wbw"
 	"log"
 	"strings"
 
@@ -17,14 +18,14 @@ import (
 	"strconv"
 )
 
-func Match(issue string) (*zczs.ZcMatch, error) {
+func Match(issue string) (*pkg.ZcMatch, error) {
 
-	doc, err := zczs.NewDoc(fmt.Sprintf("https://trade.500.com/jqc/?expect=%s", issue[2:]))
+	doc, err := pkg.NewDoc(fmt.Sprintf("https://trade.500.com/jqc/?expect=%s", issue[2:]))
 	if err != nil {
 		return nil, err
 	}
 
-	var info zczs.ZcMatch
+	var info pkg.ZcMatch
 	var t string
 	var ok bool
 	if t, ok = doc.Find(".zcfilter-qih .chked").Attr("data-expect"); !ok {
@@ -41,7 +42,7 @@ func Match(issue string) (*zczs.ZcMatch, error) {
 	}
 	var td, span *goquery.Selection
 	doc.Find("#vsTable tr").EachWithBreak(func(i int, s *goquery.Selection) bool {
-		var item zczs.Match
+		var item pkg.Match
 
 		td = s.Find("td")
 		if td.Length() != 10 {
@@ -73,8 +74,8 @@ func Match(issue string) (*zczs.ZcMatch, error) {
 			return false
 		}
 
-		item.HomeTeam = zczs.AddSpace(item.HomeTeam)
-		item.AwayTeam = zczs.AddSpace(item.AwayTeam)
+		item.HomeTeam = pkg.AddSpace(item.HomeTeam)
+		item.AwayTeam = pkg.AddSpace(item.AwayTeam)
 
 		info.Match = append(info.Match, &item)
 
@@ -84,7 +85,7 @@ func Match(issue string) (*zczs.ZcMatch, error) {
 	return &info, err
 }
 func HisIssue() ([]string, error) {
-	doc, err := zczs.NewDoc("https://kaijiang.500.com/jq4.shtml")
+	doc, err := pkg.NewDoc("https://kaijiang.500.com/jq4.shtml")
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +101,7 @@ func HisIssue() ([]string, error) {
 	return s1[:100], nil
 }
 func GetExpect() ([]string, error) {
-	doc, err := zczs.NewDoc("https://trade.500.com/jqc/")
+	doc, err := pkg.NewDoc("https://trade.500.com/jqc/")
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +120,7 @@ func HandlerIssue(ctx *fasthttp.RequestCtx) {
 
 	// {"c":"2019038","l":["2019041","2019040","2019039","2019038","2019037","2019036","2019035","2019034","2019033","2019032","2019031","2019030","2019029","2019028","2019027","2019026","2019025","2019024","2019023","2019022","2019021","2019020","2019019","2019018","2019017","2019016","2019015","2019014","2019013","2019012","2019011","2019010","2019009","2019008","2019007","2019006","2019005","2019004","2019003","2019002","2019001","2018176","2018175","2018174","2018173","2018172","2018171","2018170","2018169","2018168","2018167","2018166","2018165","2018164","2018163","2018162","2018161","2018160","2018159","2018158","2018157","2018156","2018155","2018154","2018153","2018152","2018151","2018150","2018149","2018148","2018147","2018146","2018145","2018144","2018143","2018142","2018141","2018140","2018139","2018138","2018137","2018136","2018135","2018134","2018133","2018132","2018131","2018130","2018129","2018128","2018127","2018126","2018125","2018124","2018123","2018122","2018121","2018120","2018119","2018118","2018117","2018116","2018115"]}
 
-	var q zczs.Issue
+	var q pkg.Issue
 	obj, err := GetExpect()
 	if err != nil {
 		return
@@ -172,7 +173,7 @@ func HandlerOdds(ctx *fasthttp.RequestCtx) {
 	var b []byte
 	var err error
 	issue := string(ctx.QueryArgs().Peek("MinIssue"))
-	data, err := zczs.GetByte(fmt.Sprintf("https://www.500.com/static/public/jq4/daigou/xml/%s.xml", issue[2:]))
+	data, err := pkg.GetByte(fmt.Sprintf("https://www.500.com/static/public/jq4/daigou/xml/%s.xml", issue[2:]))
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -184,7 +185,7 @@ func HandlerOdds(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	q := zczs.OuPei{}
+	q := pkg.OuPei{}
 	var t []string
 	for _, row := range v.Row {
 
@@ -193,7 +194,7 @@ func HandlerOdds(ctx *fasthttp.RequestCtx) {
 		if len(t) != 3 {
 			continue
 		}
-		var one zczs.OuPeiItem
+		var one pkg.OuPeiItem
 
 		one.MatchID = row.Fixtureid
 		one.LastOdds3 = utils.StrToFloat(t[0])

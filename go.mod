@@ -19,7 +19,7 @@ require (
 	github.com/valyala/fasthttp v1.7.1
 	github.com/zc310/alice v0.0.0-20170810004757-4f4ea6f6d00f
 	github.com/zc310/fasthttprouter v0.0.0-20170904034338-b5f6281cb890
-	github.com/zc310/fs v0.0.0-20200105045440-3d5c7d4ee77d // indirect
+	github.com/zc310/fs v0.0.0-20200105045440-3d5c7d4ee77d
 
 	github.com/zc310/log v0.0.0-20170809141252-7523c2d555f9
 	github.com/zc310/utils v0.0.0-20190917031051-20248168af87

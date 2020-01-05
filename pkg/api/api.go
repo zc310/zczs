@@ -4,11 +4,11 @@ import (
 	"github.com/pquerna/ffjson/ffjson"
 	"github.com/valyala/fasthttp"
 	"github.com/zc310/utils"
-	"github.com/zc310/zczs"
-	"github.com/zc310/zczs/wbw/jczq"
-	"github.com/zc310/zczs/wbw/jqc"
-	"github.com/zc310/zczs/wbw/sfc"
-	"github.com/zc310/zczs/yc/bjdc"
+	"github.com/zc310/zczs/pkg"
+	"github.com/zc310/zczs/pkg/wbw/jczq"
+	"github.com/zc310/zczs/pkg/wbw/jqc"
+	"github.com/zc310/zczs/pkg/wbw/sfc"
+	"github.com/zc310/zczs/pkg/yc/bjdc"
 	"log"
 	"strings"
 )
@@ -28,7 +28,7 @@ func GetByte(ctx *fasthttp.RequestCtx) ([]byte, error) {
 	} else if strings.Count(host, "zc310.tech") == 0 {
 		return []byte{}, nil
 	}
-	return zczs.GetByte(RemoveIdSpm(ctx.Request.URI().String()))
+	return pkg.GetByte(RemoveIdSpm(ctx.Request.URI().String()))
 }
 func NotFound(ctx *fasthttp.RequestCtx) {
 	b, err := GetByte(ctx)
@@ -45,7 +45,7 @@ func NotOk(ctx *fasthttp.RequestCtx) {
 }
 func NotFoundCache(ctx *fasthttp.RequestCtx) {
 	key := RemoveIdSpm(ctx.Request.URI().String())
-	if b, ok := zczs.Cache.Get(key); ok {
+	if b, ok := pkg.Cache.Get(key); ok {
 		ctx.Write(b)
 		return
 	}
@@ -55,7 +55,7 @@ func NotFoundCache(ctx *fasthttp.RequestCtx) {
 		return
 	}
 	ctx.Write(b)
-	zczs.Cache.Set(key, b)
+	pkg.Cache.Set(key, b)
 }
 func HisZcIssue(lotid, issue string) bool {
 	return LotZcR9(lotid) && utils.StrToInt(issue) < Max360Issue
@@ -110,7 +110,7 @@ func ZczsQkjinfo(ctx *fasthttp.RequestCtx) {
 
 	ctx.Write(b)
 	key := RemoveIdSpm(ctx.Request.URI().String())
-	zczs.Cache.Set(key, b)
+	pkg.Cache.Set(key, b)
 
 }
 func ZczsIssue(ctx *fasthttp.RequestCtx) {
