@@ -32,9 +32,6 @@ func Match(issue string) (*pkg.ZcMatch, error) {
 		return nil, wbw.ErrorOldIssue
 	}
 	info.Issue = "20" + t
-	if err != nil {
-		return nil, errors.Errorf("无效期次信息:%s", t)
-	}
 	info.Endtime, err = wbw.GetEndTime(doc.Find(".zcfilter-endtime").Text())
 	info.Issue = "20" + t
 	if err != nil {
@@ -68,7 +65,7 @@ func Match(issue string) (*pkg.ZcMatch, error) {
 			err = errors.New("无效比赛编号")
 			return false
 		}
-		item.MatchID, err = strconv.ParseInt(strings.TrimSuffix(strings.TrimPrefix(t, "http://odds.500.com/fenxi/shuju-"), ".shtml"), 10, 0)
+		item.MatchID, err = strconv.ParseInt(strings.TrimSuffix(strings.TrimPrefix(t, "https://odds.500.com/fenxi/shuju-"), ".shtml"), 10, 0)
 		if err != nil {
 			err = errors.Wrapf(err, "无效比赛编号")
 			return false
