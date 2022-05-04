@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -21,6 +20,7 @@ import (
 	"github.com/zc310/fs/middleware/singleflight"
 	fslog "github.com/zc310/log"
 	"github.com/zc310/zczs/pkg/api"
+	"github.com/zc310/zczs/pkg/api/extra"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
@@ -28,7 +28,7 @@ var addr string
 
 //go:embed assets
 var assets embed.FS
-var version = "1000"
+var version = "1001"
 
 func main() {
 	flag.StringVar(&addr, "addr", ":8080", ":8080")
@@ -89,7 +89,7 @@ func main() {
 	router.GET("/zczs/issue", alice.New(mw...).Then(api.ZczsIssue))
 	router.GET("/zczs/zcmatch", alice.New(mw...).Then(api.ZczsZcmatch))
 	router.GET("/zczs/match", alice.New(mw...).Then(api.NoContent))
-	router.GET("/sfc/extra", alice.New(mw...).Then(api.NoContent))
+	router.GET("/sfc/extra", alice.New(mw...).Then(extra.Handler))
 	router.GET("/sfc/his/360dd", alice.New(mw...).Then(api.NotOk))
 	router.GET("/sfc/his/360dd/:id", alice.New(mw...).Then(api.NotOk))
 	router.GET("/int/getoupei/", alice.New(mw...).Then(api.GetOupei))
@@ -123,9 +123,9 @@ func SaveDoc() error {
 		}
 	}
 	_ = os.MkdirAll(filepath.Join("tmp", "w360"), os.ModePerm)
+	_ = os.MkdirAll(filepath.Join("tmp", "extra"), os.ModePerm)
 	_ = os.MkdirAll(filepath.Join("sfc", "历史"), os.ModePerm)
 	_ = os.MkdirAll(filepath.Join("jqc", "历史"), os.ModePerm)
-	var fi []fs.DirEntry
 
 	b, err = assets.ReadFile("assets/tmp/1.png")
 	if err != nil {
@@ -136,55 +136,47 @@ func SaveDoc() error {
 		return err
 	}
 
-	if fi, err = assets.ReadDir("assets/sfc"); err != nil {
+	if err = SaveAssetsDir("sfc"); err != nil {
 		return err
 	}
-	for _, f := range fi {
-		if !f.IsDir() {
-			b, err = assets.ReadFile(fmt.Sprintf("assets/sfc/%s", f.Name()))
-			if err != nil {
-				return err
-			}
-			err = os.WriteFile(fmt.Sprintf("sfc/%s", f.Name()), b, os.ModePerm)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if fi, err = assets.ReadDir("assets/jqc"); err != nil {
+	if err = SaveAssetsDir("sfc/历史"); err != nil {
 		return err
 	}
-	for _, f := range fi {
-		if !f.IsDir() {
-			b, err = assets.ReadFile(fmt.Sprintf("assets/jqc/%s", f.Name()))
-			if err != nil {
-				return err
-			}
-			err = os.WriteFile(fmt.Sprintf("jqc/%s", f.Name()), b, os.ModePerm)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if fi, err = assets.ReadDir(fmt.Sprintf("assets/tmp/w360")); err != nil {
+
+	if err = SaveAssetsDir("jqc"); err != nil {
 		return err
 	}
-	for _, f := range fi {
-		if !f.IsDir() {
-			if "LOCK" == f.Name() {
-				continue
-			}
-			b, err = assets.ReadFile(fmt.Sprintf("assets/tmp/w360/%s", f.Name()))
-			if err != nil {
-				return err
-			}
-			err = os.WriteFile(fmt.Sprintf("tmp/w360/%s", f.Name()), b, os.ModePerm)
-			if err != nil {
-				return err
-			}
-		}
+	if err = SaveAssetsDir("jqc/历史"); err != nil {
+		return err
 	}
+	if err = SaveAssetsDir("tmp/w360"); err != nil {
+		return err
+	}
+	if err = SaveAssetsDir("tmp/extra"); err != nil {
+		return err
+	}
+
 	return os.WriteFile(fnv, []byte(version), os.ModePerm)
+}
+func SaveAssetsDir(path string) error {
+	fi, err := assets.ReadDir(fmt.Sprintf("assets/%s", path))
+	if err != nil {
+		return err
+	}
+	var b []byte
+	for _, f := range fi {
+		if !f.IsDir() {
+			b, err = assets.ReadFile(fmt.Sprintf("assets/%s/%s", path, f.Name()))
+			if err != nil {
+				return err
+			}
+			err = os.WriteFile(fmt.Sprintf("%s/%s", path, f.Name()), b, os.ModePerm)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 func Doc() ([]byte, error) {
 	var buf bytes.Buffer

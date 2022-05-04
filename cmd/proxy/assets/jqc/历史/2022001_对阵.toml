@@ -1,0 +1,23 @@
+# 截止时间
+Endtime = '2022-01-06 23:23:23'
+[[Match]]
+# 客队
+AwayTeam = '国　米'
+# 主队
+HomeTeam = '博洛尼'
+[[Match]]
+# 客队
+AwayTeam = '卡利亚'
+# 主队
+HomeTeam = '桑普多'
+[[Match]]
+# 客队
+AwayTeam = '乌迪内'
+# 主队
+HomeTeam = '佛罗伦'
+[[Match]]
+# 客队
+AwayTeam = '那不勒'
+# 主队
+HomeTeam = '尤　文'
+

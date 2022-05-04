@@ -1,0 +1,73 @@
+# 截止时间
+Endtime = '2022-01-06 23:23:23'
+[[Match]]
+# 客队
+AwayTeam = '国　米'
+# 主队
+HomeTeam = '博洛尼'
+[[Match]]
+# 客队
+AwayTeam = '卡利亚'
+# 主队
+HomeTeam = '桑普多'
+[[Match]]
+# 客队
+AwayTeam = '恩波利'
+# 主队
+HomeTeam = '拉齐奥'
+[[Match]]
+# 客队
+AwayTeam = '维罗纳'
+# 主队
+HomeTeam = '斯佩齐'
+[[Match]]
+# 客队
+AwayTeam = '都　灵'
+# 主队
+HomeTeam = '亚特兰'
+[[Match]]
+# 客队
+AwayTeam = '热那亚'
+# 主队
+HomeTeam = '萨索洛'
+[[Match]]
+# 客队
+AwayTeam = '罗　马'
+# 主队
+HomeTeam = 'AC米兰'
+[[Match]]
+# 客队
+AwayTeam = '乌迪内'
+# 主队
+HomeTeam = '佛罗伦'
+[[Match]]
+# 客队
+AwayTeam = '那不勒'
+# 主队
+HomeTeam = '尤　文'
+[[Match]]
+# 客队
+AwayTeam = '奥萨苏'
+# 主队
+HomeTeam = '赫罗纳'
+[[Match]]
+# 客队
+AwayTeam = '塞维利'
+# 主队
+HomeTeam = '萨拉戈'
+[[Match]]
+# 客队
+AwayTeam = '比利亚'
+# 主队
+HomeTeam = '希　洪'
+[[Match]]
+# 客队
+AwayTeam = '埃尔切'
+# 主队
+HomeTeam = '阿尔梅'
+[[Match]]
+# 客队
+AwayTeam = '马竞技'
+# 主队
+HomeTeam = '马哈达'
+
