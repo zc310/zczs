@@ -1,0 +1,22 @@
+# 截止时间
+Endtime = '2022-05-01 23:23:23'
+[[Match]]
+# 客队
+AwayTeam = '埃弗顿'
+# 主队
+HomeTeam = '切尔西'
+[[Match]]
+# 客队
+AwayTeam = '西汉姆'
+# 主队
+HomeTeam = '阿森纳'
+[[Match]]
+# 客队
+AwayTeam = 'AC米兰'
+# 主队
+HomeTeam = '佛罗伦'
+[[Match]]
+# 客队
+AwayTeam = '恩波利'
+# 主队
+HomeTeam = '都灵'

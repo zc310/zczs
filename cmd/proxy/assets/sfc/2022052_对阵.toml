@@ -1,0 +1,73 @@
+# 截止时间
+Endtime = '2022-05-01 23:23:23'
+[[Match]]
+# 客队
+AwayTeam = '莱切城'
+# 主队
+HomeTeam = '热　刺'
+[[Match]]
+# 客队
+AwayTeam = '切尔西'
+# 主队
+HomeTeam = '埃弗顿'
+[[Match]]
+# 客队
+AwayTeam = '阿森纳'
+# 主队
+HomeTeam = '西汉姆'
+[[Match]]
+# 客队
+AwayTeam = '佛罗伦'
+# 主队
+HomeTeam = 'AC米兰'
+[[Match]]
+# 客队
+AwayTeam = '都　灵'
+# 主队
+HomeTeam = '恩波利'
+[[Match]]
+# 客队
+AwayTeam = '国　米'
+# 主队
+HomeTeam = '乌迪内'
+[[Match]]
+# 客队
+AwayTeam = '塞尔塔'
+# 主队
+HomeTeam = '格拉纳'
+[[Match]]
+# 客队
+AwayTeam = '社　会'
+# 主队
+HomeTeam = '巴列卡'
+[[Match]]
+# 客队
+AwayTeam = '马洛卡'
+# 主队
+HomeTeam = '巴　萨'
+[[Match]]
+# 客队
+AwayTeam = '兰　斯'
+# 主队
+HomeTeam = '洛里昂'
+[[Match]]
+# 客队
+AwayTeam = '梅　斯'
+# 主队
+HomeTeam = '蒙彼利'
+[[Match]]
+# 客队
+AwayTeam = '克莱蒙'
+# 主队
+HomeTeam = '布雷斯'
+[[Match]]
+# 客队
+AwayTeam = '尼　斯'
+# 主队
+HomeTeam = '波尔多'
+[[Match]]
+# 客队
+AwayTeam = '里　昂'
+# 主队
+HomeTeam = '马　赛'
+
