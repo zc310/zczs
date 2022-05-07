@@ -37,3 +37,14 @@ func Handler(ctx *fasthttp.RequestCtx) {
 func Key(s string) string {
 	return strings.TrimPrefix(strings.Replace(s, "/", "_", -1), "_")
 }
+func File(name string) fasthttp.RequestHandler {
+	return func(ctx *fasthttp.RequestCtx) {
+		var b []byte
+		var err error
+		if b, err = os.ReadFile(filepath.Join("tmp", "extra", name)); err != nil {
+			ctx.Response.Header.SetStatusCode(http.StatusNoContent)
+			return
+		}
+		_, _ = ctx.Write(b)
+	}
+}

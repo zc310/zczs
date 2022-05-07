@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/getlantern/systray"
 	"github.com/valyala/fasthttp"
 	"github.com/yuin/goldmark"
 	"github.com/zc310/alice"
@@ -28,6 +29,7 @@ var addr string
 
 //go:embed assets
 var assets embed.FS
+
 var version = "1001"
 
 func main() {
@@ -90,9 +92,11 @@ func main() {
 	router.GET("/zczs/zcmatch", alice.New(mw...).Then(api.ZczsZcmatch))
 	router.GET("/zczs/match", alice.New(mw...).Then(api.NoContent))
 	router.GET("/sfc/extra", alice.New(mw...).Then(extra.Handler))
-	router.GET("/sfc/his/360dd", alice.New(mw...).Then(api.NotOk))
+	router.GET("/sfc/his/360dd", alice.New(mw...).Then(extra.File("360dd")))
 	router.GET("/sfc/his/360dd/:id", alice.New(mw...).Then(api.NotOk))
 	router.GET("/int/getoupei/", alice.New(mw...).Then(api.GetOupei))
+	router.GET("/int/getyapei", alice.New(mw...).Then(api.NoContent))
+	router.GET("/zc/sfapi", alice.New(mw...).Then(api.NoContent))
 	router.GET("/int/hiszhanji", alice.New(mw...).Then(api.NotOk))
 	router.GET("/jczqdata/geteurochange/match/:mid/gcid/:gid", alice.New(mw...).Then(api.NotOk))
 	router.POST("/int/querybalance", api.NoContent)
@@ -102,8 +106,12 @@ func main() {
 
 	fmt.Println("足彩助手代理服务")
 
-	log.Fatal(fasthttp.ListenAndServe(addr, router.Handler))
-
+	go func() {
+		log.Fatal(fasthttp.ListenAndServe(addr, router.Handler))
+	}()
+	systray.Run(onReady, func() {
+		log.Println("退出")
+	})
 }
 
 func SaveDoc() error {
@@ -188,4 +196,21 @@ func Doc() ([]byte, error) {
 		return nil, err
 	}
 	return buf.Bytes(), nil
+}
+
+func onReady() {
+	s1 := "足彩助手代理"
+	b, err := assets.ReadFile("assets/icon/w360.ico")
+	if err != nil {
+		systray.SetTitle(s1)
+	} else {
+		systray.SetTemplateIcon(b, b)
+	}
+
+	systray.SetTooltip(s1)
+	mQuit := systray.AddMenuItem(fmt.Sprintf("关闭 %s", s1), "")
+	go func() {
+		<-mQuit.ClickedCh
+		systray.Quit()
+	}()
 }
